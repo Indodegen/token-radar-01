@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — the pre-token board</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">DefiLlama snapshot &middot; 14 Nov 2026 &middot; 758 protocols scanned</p>
+    <h1>TOKEN RADAR</h1>
+    <p class="lede">Every protocol that records no token, ranked by what its token would be
+    worth if its record stayed as it is. The value comes from the snapshot's own
+    figures &mdash; TVL, seven-day growth and time running with no token &mdash; never
+    from a list of names. Each row carries the concrete steps to farm it.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="toolbar" aria-label="Filter the board">
+    <input id="q" type="search" placeholder="Search a protocol&hellip;" autocomplete="off">
+    <select id="cat" aria-label="Category"><option value="">All categories</option></select>
+    <select id="chain" aria-label="Chain"><option value="">All chains</option></select>
+    <select id="sort" aria-label="Sort by">
+      <option value="value">Sort: implied value</option>
+      <option value="tvl">Sort: TVL</option>
+      <option value="growth">Sort: 7-day growth</option>
+      <option value="age">Sort: oldest first</option>
+      <option value="name">Sort: name A&ndash;Z</option>
+    </select>
+    <label class="check"><input id="wl" type="checkbox"> Watchlist only</label>
+  </section>
+
+  <p class="count" id="count"></p>
+
+  <div class="layout">
+    <div class="tablewrap">
+      <table id="board">
+        <thead>
+          <tr>
+            <th class="num">#</th>
+            <th>Protocol</th>
+            <th>Category</th>
+            <th>Chains</th>
+            <th class="num">TVL</th>
+            <th class="num">7d</th>
+            <th class="num">Age</th>
+            <th class="num">Implied value</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="empty" id="empty" hidden>No protocol matches this filter. Clear the search or pick another category.</p>
+    </div>
+
+    <aside class="detail" id="detail" aria-live="polite">
+      <div class="detail-empty">
+        <h2>Pick a protocol</h2>
+        <p>Click any row to open its detail view: the value breakdown, the
+        farm plan with costs and times, and what the snapshot actually says
+        about it.</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="model" id="model">
+    <h2>How the value is computed</h2>
+    <p class="model-formula">implied value = TVL &times; category multiple &times; growth factor &times; age factor &times; chain factor</p>
+    <div class="model-grid">
+      <div>
+        <h3>Category multiple</h3>
+        <p>The median market-cap-to-TVL ratio of the protocols in the same
+        category whose token already trades, taken from this snapshot at run
+        time. A category with fewer than three trading tokens uses the
+        overall median. Multiples are capped at 1.00&times; TVL.</p>
+      </div>
+      <div>
+        <h3>Growth factor</h3>
+        <p>From the seven-day TVL change: 1 + half the change, clamped to
+        the range 0.80&ndash;1.60. A protocol growing 40% in a week scores
+        1.20; one down 40% scores 0.80. No change reported scores 1.00.</p>
+      </div>
+      <div>
+        <h3>Age factor</h3>
+        <p>From the days since DefiLlama began tracking it: 1 + a quarter
+        of the share of four years, so a four-year-old protocol with no
+        token scores 1.25 and a new one scores near 1.00.</p>
+      </div>
+      <div>
+        <h3>Chain factor</h3>
+        <p>1 + 0.04 per extra chain, up to six chains. A protocol live on
+        several chains reaches more users and more airdrop surfaces.</p>
+      </div>
+    </div>
+    <h3>Multiples by category</h3>
+    <div class="mults" id="mults"></div>
+    <p class="fine">A board row is an implied value, the entry&rsquo;s own claim &mdash;
+    never a prediction that a token will be issued, or when. A protocol
+    &ldquo;records no token&rdquo; means its DefiLlama record carries none; it
+    may still have a token the record does not carry.</p>
+  </section>
+
+  <section class="aside2">
+    <div>
+      <h2>Set aside: not a launch</h2>
+      <p>Pre-token protocols the house watchlist rule leaves out, and why.
+      Centralised exchanges, bridges and liquid-staking products are not
+      protocols waiting on a launch of their own.</p>
+      <ol class="setaside" id="setaside"></ol>
+    </div>
+    <div>
+      <h2>Already has a token</h2>
+      <p>The largest protocols whose token already trades, set aside from
+      the board with the multiple they earn today.</p>
+      <ol class="livetop" id="livetop"></ol>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap fine">
+  <p>Token Radar &middot; snapshot 14 Nov 2026 &middot; 209 protocols ranked, 40 of them
+  the house watchlist &middot; values in whole US dollars &middot; farm costs are
+  estimates of one transaction&rsquo;s gas on each chain.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
